@@ -8,7 +8,7 @@
 import Foundation
 
 protocol FetchSpaceshipPageUseCaseProtocol {
-    func execute(for pageNumber: Int) async throws -> SpaceshipPage
+    func execute(for pageNumber: Int, search criteria: String) async throws -> SpaceshipPage
 }
 
 class FetchSpaceshipPageUseCase: FetchSpaceshipPageUseCaseProtocol {
@@ -18,7 +18,7 @@ class FetchSpaceshipPageUseCase: FetchSpaceshipPageUseCaseProtocol {
         self.repository = repository
     }
 
-    func execute(for pageNumber: Int) async throws -> SpaceshipPage {
-        return try await repository.fetchSpaceshipPage(for: pageNumber)
+    func execute(for pageNumber: Int, search criteria: String = "") async throws -> SpaceshipPage {
+        return try await repository.fetchSpaceshipPage(for: pageNumber, search: criteria)
     }
 }

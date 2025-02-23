@@ -8,7 +8,7 @@
 import Foundation
 
 protocol FetchFilmPageUseCaseProtocol {
-    func execute(for pageNumber: Int) async throws -> FilmPage
+    func execute(for pageNumber: Int, search criteria: String) async throws -> FilmPage
 }
 
 class FetchFilmPageUseCase: FetchFilmPageUseCaseProtocol {
@@ -18,7 +18,7 @@ class FetchFilmPageUseCase: FetchFilmPageUseCaseProtocol {
         self.repository = repository
     }
 
-    func execute(for pageNumber: Int) async throws -> FilmPage {
-        return try await repository.fetchFilmsPage(for: pageNumber)
+    func execute(for pageNumber: Int, search criteria: String) async throws -> FilmPage {
+        return try await repository.fetchFilmsPage(for: pageNumber, search: criteria)
     }
 }

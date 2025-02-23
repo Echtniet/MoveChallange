@@ -8,7 +8,7 @@
 import Foundation
 
 protocol FetchCharacterPageUseCaseProtocol {
-    func execute(for pageNumber: Int) async throws -> CharacterPage
+    func execute(for pageNumber: Int, search criteria: String) async throws -> CharacterPage
 }
 
 class FetchCharacterPageUseCase: FetchCharacterPageUseCaseProtocol {
@@ -18,7 +18,7 @@ class FetchCharacterPageUseCase: FetchCharacterPageUseCaseProtocol {
         self.repository = repository
     }
 
-    func execute(for pageNumber: Int) async throws -> CharacterPage {
-        return try await repository.fetchCharactersPage(for: pageNumber)
+    func execute(for pageNumber: Int, search criteria: String = "") async throws -> CharacterPage {
+        return try await repository.fetchCharactersPage(for: pageNumber, search: criteria)
     }
 }

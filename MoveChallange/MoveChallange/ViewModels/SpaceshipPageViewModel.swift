@@ -16,11 +16,14 @@ class SpaceshipPageViewModel {
     var hasPrevious: Bool = false
     var spaceships: [Spaceship] = []
     var searchCriteria: String = ""
+    var firstLoad: Bool = true
 
     var currentPage = 0
 
     var isLoading: Bool = false
     var errorMessage: String?
+
+    var searchTask: Task<Void, Never>?
 
     @ObservationIgnored private let fetchSpaceshipUseCase: FetchSpaceshipPageUseCaseProtocol
     @ObservationIgnored var searchTextSubject = CurrentValueSubject<String, Never>("")
@@ -28,6 +31,7 @@ class SpaceshipPageViewModel {
 
     init(fetchSpaceshipUseCase: FetchSpaceshipPageUseCaseProtocol) {
         self.fetchSpaceshipUseCase = fetchSpaceshipUseCase
+        setupDebouncingSearchFetch()
     }
 
     func fetchSpaceships() async {
@@ -37,7 +41,7 @@ class SpaceshipPageViewModel {
 
         do {
             currentPage += 1
-            let spaceshipPage = try await fetchSpaceshipUseCase.execute(for: currentPage)
+            let spaceshipPage = try await fetchSpaceshipUseCase.execute(for: currentPage, search: searchCriteria)
             spaceships.append(contentsOf: spaceshipPage.results)
             hasNext = spaceshipPage.hasNext
             hasPrevious = spaceshipPage.hasPrevious
@@ -47,5 +51,31 @@ class SpaceshipPageViewModel {
         }
 
         isLoading = false
+        firstLoad = false
+    }
+
+    private func setupDebouncingSearchFetch() {
+        searchTextSubject
+            .debounce(for: 0.5, scheduler: DispatchQueue.main)
+            .sink { [weak self] text in
+                guard let firstLoad = self?.firstLoad, !firstLoad else { return }
+                self?.searchTask?.cancel()
+                self?.searchTask = self?.createSearchTask(text)
+            }
+            .store(in: &cancellables)
+    }
+
+    private func createSearchTask(_ text: String) -> Task<Void, Never> {
+        Task { @MainActor in
+            await onSearchFetch()
+        }
+    }
+
+    private func onSearchFetch() async {
+        currentPage = 0
+        spaceships.removeAll()
+        hasNext = true
+        hasPrevious = false
+        await fetchSpaceships()
     }
 }

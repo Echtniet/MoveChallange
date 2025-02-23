@@ -39,7 +39,7 @@ extension View {
     }
 }
 
-enum CardStyles {
+enum CardStyles: Codable {
     case character
     case film
     case spaceship

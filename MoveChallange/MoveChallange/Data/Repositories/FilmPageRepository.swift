@@ -8,7 +8,7 @@
 import Foundation
 
 protocol FilmPageRepositoryProtocol {
-    func fetchFilmsPage(for pageNumber: Int) async throws -> FilmPage
+    func fetchFilmsPage(for pageNumber: Int, search criteria: String) async throws -> FilmPage
 }
 
 class FilmPageRepository: FilmPageRepositoryProtocol {
@@ -19,8 +19,8 @@ class FilmPageRepository: FilmPageRepositoryProtocol {
         self.apiService = apiService
     }
 
-    func fetchFilmsPage(for pageNumber: Int) async throws -> FilmPage {
-        let filmPageDTO = try await apiService.fetchFilmsPage(for: pageNumber)
+    func fetchFilmsPage(for pageNumber: Int, search criteria: String = "") async throws -> FilmPage {
+        let filmPageDTO = try await apiService.fetchFilmsPage(for: pageNumber, search: criteria)
         return FilmPage(dto: filmPageDTO)
     }
 

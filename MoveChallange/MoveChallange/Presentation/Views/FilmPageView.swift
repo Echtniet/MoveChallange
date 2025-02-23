@@ -9,17 +9,21 @@
 import SwiftUI
 
 struct FilmPageView: View {
+    var namespace: Namespace.ID
 
     @State private var viewModel: FilmPageViewModel
+    @Binding private var coordinator: FilmCoordinator
 
-    init(viewModel: FilmPageViewModel) {
+    init(_ namespace: Namespace.ID, viewModel: FilmPageViewModel, coordinator: Binding<FilmCoordinator>) {
+        self.namespace = namespace
         _viewModel = State(wrappedValue: viewModel)
+        _coordinator = coordinator
     }
 
     var body: some View {
         ZStack {
             VStack {
-                //            SearchBoxView(text: <#T##Binding<String>#>, animation: <#T##Namespace.ID#>)
+                SearchBoxView(text: $viewModel.searchCriteria, animation: namespace, color: .blue, searchBoxStyle: .film)
                 ScrollView {
                     LazyVStack(spacing: 24) {
                         if viewModel.errorMessage != nil {
@@ -30,6 +34,9 @@ struct FilmPageView: View {
                             ForEach(viewModel.films, id: \.self) { film in
                                 Card(title: film.title, subtitle: film.director) {
 
+                                }
+                                .onTapGesture {
+                                    coordinator.navigateToDetail(film: film)
                                 }
                                 .cardStyle(film.cardStyle)
                                 .onAppear {
@@ -43,6 +50,9 @@ struct FilmPageView: View {
                     .padding()
                 }
             }
+        }
+        .onChange(of: viewModel.searchCriteria) { _, new in
+            viewModel.searchTextSubject.send(new)
         }
         .task {
             if viewModel.films.isEmpty {

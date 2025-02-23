@@ -18,8 +18,10 @@ class CharacterCoordinator {
         self.fetchCharacterPageUseCase = fetchCharacterPageUseCase
     }
 
-    func navigateToDetail(character: StarCharacter) {
-        path.append(AppRoute.characterDetail(character))
-        print(path)
+    func navigateToDetail(character: StarCharacter, shouldClearPath: Bool = false) {
+        if shouldClearPath {
+            path.removeAll()
+        }
+        path.append(.characterDetail(character))
     }
 }

@@ -16,11 +16,14 @@ class FilmPageViewModel {
     var hasPrevious: Bool = false
     var films: [Film] = []
     var searchCriteria: String = ""
+    var firstLoad: Bool = true
 
     var currentPage = 0
 
     var isLoading: Bool = false
     var errorMessage: String?
+
+    var searchTask: Task<Void, Never>?
 
     @ObservationIgnored private let fetchFilmPageUseCase: FetchFilmPageUseCaseProtocol
     @ObservationIgnored var searchTextSubject = CurrentValueSubject<String, Never>("")
@@ -28,6 +31,7 @@ class FilmPageViewModel {
 
     init(fetchFilmPageUseCase: FetchFilmPageUseCaseProtocol) {
         self.fetchFilmPageUseCase = fetchFilmPageUseCase
+        setupDebouncingSearchFetch()
     }
 
     func fetchFilms() async {
@@ -37,7 +41,7 @@ class FilmPageViewModel {
 
         do {
             currentPage += 1
-            let filmPage = try await fetchFilmPageUseCase.execute(for: currentPage)
+            let filmPage = try await fetchFilmPageUseCase.execute(for: currentPage, search: searchCriteria)
             films.append(contentsOf: filmPage.results)
             hasNext = filmPage.hasNext
             hasPrevious = filmPage.hasPrevious
@@ -47,5 +51,31 @@ class FilmPageViewModel {
         }
 
         isLoading = false
+        firstLoad = false
+    }
+
+    private func setupDebouncingSearchFetch() {
+        searchTextSubject
+            .debounce(for: 0.5, scheduler: DispatchQueue.main)
+            .sink { [weak self] text in
+                guard let firstLoad = self?.firstLoad, !firstLoad else { return }
+                self?.searchTask?.cancel()
+                self?.searchTask = self?.createSearchTask(text)
+            }
+            .store(in: &cancellables)
+    }
+
+    private func createSearchTask(_ text: String) -> Task<Void, Never> {
+        Task { @MainActor in
+            await onSearchFetch()
+        }
+    }
+
+    private func onSearchFetch() async {
+        currentPage = 0
+        films.removeAll()
+        hasNext = true
+        hasPrevious = false
+        await fetchFilms()
     }
 }

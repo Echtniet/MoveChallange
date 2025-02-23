@@ -8,17 +8,21 @@
 import SwiftUI
 
 struct SpaceshipPageView: View {
+    var namespace: Namespace.ID
 
     @State private var viewModel: SpaceshipPageViewModel
+    @Binding private var coordinator: SpaceshipCoordinator
 
-    init(viewModel: SpaceshipPageViewModel) {
+    init(_ namespace: Namespace.ID, viewModel: SpaceshipPageViewModel, coordinator: Binding<SpaceshipCoordinator>) {
+        self.namespace = namespace
         _viewModel = State(wrappedValue: viewModel)
+        _coordinator = coordinator
     }
 
     var body: some View {
         ZStack {
             VStack {
-                //            SearchBoxView(text: <#T##Binding<String>#>, animation: <#T##Namespace.ID#>)
+                SearchBoxView(text: $viewModel.searchCriteria, animation: namespace, color: .white, searchBoxStyle: .spaceship)
                 ScrollView {
                     LazyVStack(spacing: 24) {
                         if viewModel.errorMessage != nil {
@@ -29,6 +33,9 @@ struct SpaceshipPageView: View {
                             ForEach(viewModel.spaceships, id: \.self) { spaceship in
                                 Card(title: spaceship.name, subtitle: spaceship.cargoCapacity) {
 
+                                }
+                                .onTapGesture {
+                                    coordinator.navigateToDetail(spaceship: spaceship)
                                 }
                                 .cardStyle(spaceship.cardStyle)
                                 .onAppear {
@@ -42,6 +49,9 @@ struct SpaceshipPageView: View {
                     .padding()
                 }
             }
+        }
+        .onChange(of: viewModel.searchCriteria) { _, new in
+            viewModel.searchTextSubject.send(new)
         }
         .task {
             if viewModel.spaceships.isEmpty {

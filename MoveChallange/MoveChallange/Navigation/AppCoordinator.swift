@@ -49,17 +49,17 @@ final class AppCoordinator {
             selectedTab = .characters
         case .characterDetail(let character):
             selectedTab = .characters
-            characterCoordinator.navigateToDetail(character: character)
+            characterCoordinator.navigateToDetail(character: character, shouldClearPath: true)
         case .filmPage:
             selectedTab = .films
         case .filmDetail(let film):
             selectedTab = .films
-            filmCoordinator.navigateToDetail(film: film)
+            filmCoordinator.navigateToDetail(film: film, shouldClearPath: true)
         case .spaceshipPage:
             selectedTab = .spaceships
         case .spaceshipDetail(let spaceship):
             selectedTab = .spaceships
-            spaceshipCoordinator.navigateToDetail(spaceship: spaceship)
+            spaceshipCoordinator.navigateToDetail(spaceship: spaceship, shouldClearPath: true)
         case .favoritePage:
             selectedTab = .favorites
         }

@@ -8,8 +8,8 @@
 import Foundation
 
 extension APIService {
-    func fetchCharactersPage(for pageNumber: Int) async throws -> CharacterPageDTO {
-        let urlString = "\(baseURLString)/people/?page=\(pageNumber)&format=json"
+    func fetchCharactersPage(for pageNumber: Int, search criteria: String = "") async throws -> CharacterPageDTO {
+        let urlString = "\(baseURLString)/people/?page=\(pageNumber)&format=json&search=\(criteria)"
         guard let url = URL(string: urlString) else {
             throw URLError(.badURL)
         }

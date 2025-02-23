@@ -10,7 +10,7 @@ import SwiftUI
 
 @Observable
 class SpaceshipCoordinator {
-    var path: NavigationPath = .init()
+    var path: [AppRoute] = []
 
     @ObservationIgnored private let fetchSpaceshipPageUseCase: FetchSpaceshipPageUseCaseProtocol
 
@@ -18,7 +18,10 @@ class SpaceshipCoordinator {
         self.fetchSpaceshipPageUseCase = fetchSpaceshipPageUseCase
     }
 
-    func navigateToDetail(spaceship: Spaceship) {
-
+    func navigateToDetail(spaceship: Spaceship, shouldClearPath: Bool = false) {
+        if shouldClearPath {
+            path.removeAll()
+        }
+        path.append(.spaceshipDetail(spaceship))
     }
 }

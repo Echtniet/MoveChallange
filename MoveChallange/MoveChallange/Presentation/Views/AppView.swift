@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct AppView: View {
+    @Namespace private var animation
     @State private var coordinator: AppCoordinator
 
     init() {
@@ -22,76 +23,91 @@ struct AppView: View {
         TabView(selection: $coordinator.selectedTab) {
             NavigationStack(path: $coordinator.characterCoordinator.path) {
                 CharacterPageView(
-                    viewModel: DIContainer.shared.resolve(CharacterPageViewModel.self),
-                    coordinator: DIContainer.shared.resolve(CharacterCoordinator.self)
+                    animation, viewModel: DIContainer.shared.resolve(CharacterPageViewModel.self),
+                    coordinator: $coordinator.characterCoordinator
                 )
                 .navigationDestination(for: AppRoute.self) { route in
                     switch route {
                     case .characterDetail(let character):
-                        Text("\(character.name)")
+                        CharacterDetailView(
+                            animation,
+                            character: character,
+                            viewModel: DIContainer.shared.resolve(CharacterDetailViewModel.self)
+                        )
                     default:
                         EmptyView()
                     }
                 }
             }
             .tabItem {
-                Image(systemName: "person.crop.circle")
+                Image(systemName: "person")
                 Text("Characters")
             }
             .tag(AppCoordinator.Tab.characters)
 
             NavigationStack(path: $coordinator.filmCoordinator.path) {
-                FilmPageView(viewModel: DIContainer.shared.resolve(FilmPageViewModel.self))
-                    .navigationDestination(for: AppRoute.self) { route in
-                        switch route {
-                        case .filmDetail(let film):
-                            EmptyView()
-                        default:
-                            EmptyView()
-                        }
+                FilmPageView(
+                    animation,
+                    viewModel: DIContainer.shared.resolve(FilmPageViewModel.self),
+                    coordinator: $coordinator.filmCoordinator
+                )
+                .navigationDestination(for: AppRoute.self) { route in
+                    switch route {
+                    case .filmDetail(let film):
+                        FilmDetailView(
+                            animation,
+                            film: film,
+                            viewModel: DIContainer.shared.resolve(FilmDetailViewModel.self)
+                        )
+                    default:
+                        EmptyView()
                     }
+                }
             }
             .tabItem {
-                Image(systemName: "person.crop.circle")
+                Image(systemName: "popcorn")
                 Text("Films")
             }
             .tag(AppCoordinator.Tab.films)
 
             NavigationStack(path: $coordinator.spaceshipCoordinator.path) {
-                SpaceshipPageView(viewModel: DIContainer.shared.resolve(SpaceshipPageViewModel.self))
-                    .navigationDestination(for: AppRoute.self) { route in
-                        switch route {
-                        case .spaceshipDetail(let spaceship):
-                            EmptyView()
-                        default:
-                            EmptyView()
-                        }
+                SpaceshipPageView(
+                    animation,
+                    viewModel: DIContainer.shared.resolve(SpaceshipPageViewModel.self),
+                    coordinator: $coordinator.spaceshipCoordinator
+                )
+                .navigationDestination(for: AppRoute.self) { route in
+                    switch route {
+                    case .spaceshipDetail(let spaceship):
+                        SpaceshipDetailView(
+                            animation,
+                            spaceship: spaceship,
+                            viewModel: DIContainer.shared.resolve(SpaceshipDetailViewModel.self))
+                    default:
+                        EmptyView()
                     }
+                }
             }
             .tabItem {
-                Image(systemName: "person.crop.circle")
+                Image(systemName: "airplane")
                 Text("Spaceships")
             }
             .tag(AppCoordinator.Tab.spaceships)
 
-//            NavigationStack(path: $coordinator.favoriteCoordinator.path) {
-//                SpaceshipPageView(viewModel: DIContainer.shared.resolve(SpaceshipPageViewModel.self))
-//                    .navigationDestination(for: AppRoute.self) { route in
-//                        switch route {
-//                        case .spaceshipDetail(let spaceship):
-//                            EmptyView()
-//                        default:
-//                            EmptyView()
-//                        }
-//                    }
-//            }
-//            .tabItem {
-//                Image(systemName: "person.crop.circle")
-//                Text("Favorites")
-//            }
-//            .tag(AppCoordinator.Tab.favorites)
+            NavigationStack(path: $coordinator.favoriteCoordinator.path) {
+                FavoritesPageView(
+                    animation,
+                    viewModel: DIContainer.shared.resolve(FavoritesPageViewModel.self)
+                )
+            }
+            .tabItem {
+                Image(systemName: "heart")
+                Text("Favorites")
+            }
+            .tag(AppCoordinator.Tab.favorites)
         }
         .tint(tabColor(for: coordinator.selectedTab))
+        .environment(coordinator)
     }
 
     func tabColor(for tab: AppCoordinator.Tab) -> Color {
@@ -99,7 +115,7 @@ struct AppView: View {
         case .films: return .blue   // Planet theme
         case .spaceships: return .white  // Spaceship theme
         case .characters: return .red    // Sith theme
-            default: return .gray
+        default: return .gray
         }
     }
 }

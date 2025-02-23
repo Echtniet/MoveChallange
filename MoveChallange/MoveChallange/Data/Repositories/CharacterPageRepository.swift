@@ -8,7 +8,7 @@
 import Foundation
 
 protocol CharacterPageRepositoryProtocol {
-    func fetchCharactersPage(for pageNumber: Int) async throws -> CharacterPage
+    func fetchCharactersPage(for pageNumber: Int, search criteria: String) async throws -> CharacterPage
 }
 
 class CharacterPageRepository: CharacterPageRepositoryProtocol {
@@ -19,8 +19,8 @@ class CharacterPageRepository: CharacterPageRepositoryProtocol {
         self.apiService = apiService
     }
 
-    func fetchCharactersPage(for pageNumber: Int) async throws -> CharacterPage {
-        let characterPageDTO = try await apiService.fetchCharactersPage(for: pageNumber)
+    func fetchCharactersPage(for pageNumber: Int, search criteria: String = "") async throws -> CharacterPage {
+        let characterPageDTO = try await apiService.fetchCharactersPage(for: pageNumber, search: criteria)
         return CharacterPage(dto: characterPageDTO)
     }
 

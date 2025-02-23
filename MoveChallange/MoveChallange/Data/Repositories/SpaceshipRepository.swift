@@ -2,26 +2,42 @@
 //  SpaceshipRepository.swift
 //  MoveChallange
 //
-//  Created by Clinton on 20/02/2025.
+//  Created by Clinton on 21/02/2025.
 //
 
 import Foundation
 
-protocol SpaceshipPageRepositoryProtocol {
-    func fetchSpaceshipPage(for pageNumber: Int) async throws -> SpaceshipPage
+protocol SpaceshipRepositoryProtocol {
+    func fetchSpaceship(urlString: String) async throws -> Spaceship
+    func fetchSpaceships(urlStrings: [String]) async throws -> [Spaceship]
 }
 
-class SpaceshipPageRepository: SpaceshipPageRepositoryProtocol {
-
+class SpaceshipRepository: SpaceshipRepositoryProtocol {
     private let apiService: APIServiceProtocol
 
     init(apiService: APIServiceProtocol) {
         self.apiService = apiService
     }
 
-    func fetchSpaceshipPage(for pageNumber: Int) async throws -> SpaceshipPage {
-        let spaceshipPageDTO = try await apiService.fetchSpaceshipsDTOPage(for: pageNumber)
-        return SpaceshipPage(dto: spaceshipPageDTO)
+    func fetchSpaceship(urlString: String) async throws -> Spaceship {
+        let spaceshipDTO = try await apiService.fetchSpaceship(urlString: urlString)
+        return Spaceship(dto: spaceshipDTO)
     }
 
+    func fetchSpaceships(urlStrings: [String]) async throws -> [Spaceship] {
+        return try await withThrowingTaskGroup(of: Spaceship.self) { group in
+            for urlString in urlStrings {
+                group.addTask {
+                    return try await self.fetchSpaceship(urlString: urlString)
+                }
+            }
+
+            var spaceships: [Spaceship] = []
+            for try await spaceship in group {
+                spaceships.append(spaceship)
+            }
+
+            return spaceships
+        }
+    }
 }

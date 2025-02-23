@@ -8,8 +8,8 @@
 import Foundation
 
 extension APIService {
-    func fetchFilmsPage(for pageNumber: Int) async throws -> FilmPageDTO {
-        let urlString = "\(baseURLString)/films/?page=\(pageNumber)&format=json"
+    func fetchFilmsPage(for pageNumber: Int, search criteria: String = "") async throws -> FilmPageDTO {
+        let urlString = "\(baseURLString)/films/?page=\(pageNumber)&format=json&search=\(criteria)"
         guard let url = URL(string: urlString) else {
             throw URLError(.badURL)
         }

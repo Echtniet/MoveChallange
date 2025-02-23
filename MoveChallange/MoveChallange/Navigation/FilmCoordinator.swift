@@ -10,7 +10,7 @@ import SwiftUI
 
 @Observable
 class FilmCoordinator {
-    var path: NavigationPath = .init()
+    var path: [AppRoute] = []
 
     @ObservationIgnored private let fetchFilmPageUseCase: FetchFilmPageUseCaseProtocol
 
@@ -18,7 +18,10 @@ class FilmCoordinator {
         self.fetchFilmPageUseCase = fetchFilmPageUseCase
     }
 
-    func navigateToDetail(film: Film) {
-
+    func navigateToDetail(film: Film, shouldClearPath: Bool = false) {
+        if shouldClearPath {
+            path.removeAll()
+        }
+        path.append(AppRoute.filmDetail(film))
     }
 }
