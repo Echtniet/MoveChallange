@@ -18,9 +18,13 @@ class SpaceshipCoordinator {
         self.fetchSpaceshipPageUseCase = fetchSpaceshipPageUseCase
     }
 
+    func back() {
+        path.removeLast()
+    }
+
     func navigateToDetail(spaceship: Spaceship, shouldClearPath: Bool = false) {
         if shouldClearPath {
-            path.removeAll()
+//            path.removeAll()
         }
         path.append(.spaceshipDetail(spaceship))
     }

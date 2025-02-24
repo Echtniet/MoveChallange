@@ -10,12 +10,13 @@ import SwiftUI
 struct SpaceshipDetailView: View {
     var namespace: Namespace.ID
 
-    @Environment(AppCoordinator.self) var coordinator
     @State private var viewModel: SpaceshipDetailViewModel
+    @State private var coordinator: AppCoordinator
 
-    init(_ namespace: Namespace.ID, spaceship: Spaceship, viewModel: SpaceshipDetailViewModel) {
+    init(_ namespace: Namespace.ID, spaceship: Spaceship, viewModel: SpaceshipDetailViewModel, coordinator: AppCoordinator) {
         self.namespace = namespace
-       _viewModel = State(wrappedValue: viewModel)
+        _viewModel = State(wrappedValue: viewModel)
+        _coordinator = State(wrappedValue: coordinator)
         viewModel.spaceship = spaceship
     }
 

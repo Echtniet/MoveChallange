@@ -14,6 +14,12 @@ struct AppView: View {
     init() {
         let diContainer = DIContainer.shared
         _coordinator = State(wrappedValue: diContainer.resolve(AppCoordinator.self))
+
+        let appearance = UITabBarAppearance()
+        appearance.configureWithDefaultBackground()
+
+        UITabBar.appearance().standardAppearance = appearance
+        UITabBar.appearance().scrollEdgeAppearance = appearance
         UITabBar.appearance().barTintColor = UIColor.black
         UITabBar.appearance().unselectedItemTintColor = UIColor.gray
         UITabBar.appearance().unselectedItemTintColor = UIColor.darkGray
@@ -32,13 +38,26 @@ struct AppView: View {
                         CharacterDetailView(
                             animation,
                             character: character,
-                            viewModel: DIContainer.shared.resolve(CharacterDetailViewModel.self)
+                            viewModel: DIContainer.shared.resolve(CharacterDetailViewModel.self),
+                            coordinator: DIContainer.shared.resolve(AppCoordinator.self)
                         )
+                        .navigationBarBackButtonHidden(true)
+                        .toolbar {
+                            ToolbarItem(placement: .navigationBarLeading) {
+                                Button {
+                                    coordinator.back()
+                                } label: {
+                                    Image(systemName: "chevron.left")
+                                        .foregroundColor(.red)
+                                }
+                            }
+                        }
                     default:
                         EmptyView()
                     }
                 }
             }
+
             .tabItem {
                 Image(systemName: "person")
                 Text("Characters")
@@ -57,8 +76,20 @@ struct AppView: View {
                         FilmDetailView(
                             animation,
                             film: film,
-                            viewModel: DIContainer.shared.resolve(FilmDetailViewModel.self)
+                            viewModel: DIContainer.shared.resolve(FilmDetailViewModel.self),
+                            coordinator: DIContainer.shared.resolve(AppCoordinator.self)
                         )
+                        .navigationBarBackButtonHidden(true)
+                        .toolbar {
+                            ToolbarItem(placement: .navigationBarLeading) {
+                                Button {
+                                    coordinator.back()
+                                } label: {
+                                    Image(systemName: "chevron.left")
+                                        .foregroundColor(.blue)
+                                }
+                            }
+                        }
                     default:
                         EmptyView()
                     }
@@ -82,7 +113,20 @@ struct AppView: View {
                         SpaceshipDetailView(
                             animation,
                             spaceship: spaceship,
-                            viewModel: DIContainer.shared.resolve(SpaceshipDetailViewModel.self))
+                            viewModel: DIContainer.shared.resolve(SpaceshipDetailViewModel.self),
+                            coordinator: DIContainer.shared.resolve(AppCoordinator.self)
+                        )
+                        .navigationBarBackButtonHidden(true)
+                        .toolbar {
+                            ToolbarItem(placement: .navigationBarLeading) {
+                                Button {
+                                    coordinator.back()
+                                } label: {
+                                    Image(systemName: "chevron.left")
+                                        .foregroundColor(.white)
+                                }
+                            }
+                        }
                     default:
                         EmptyView()
                     }
@@ -97,7 +141,8 @@ struct AppView: View {
             NavigationStack(path: $coordinator.favoriteCoordinator.path) {
                 FavoritesPageView(
                     animation,
-                    viewModel: DIContainer.shared.resolve(FavoritesPageViewModel.self)
+                    viewModel: DIContainer.shared.resolve(FavoritesPageViewModel.self),
+                    coordinator: DIContainer.shared.resolve(AppCoordinator.self)
                 )
             }
             .tabItem {
@@ -107,14 +152,13 @@ struct AppView: View {
             .tag(AppCoordinator.Tab.favorites)
         }
         .tint(tabColor(for: coordinator.selectedTab))
-        .environment(coordinator)
     }
 
     func tabColor(for tab: AppCoordinator.Tab) -> Color {
         switch tab {
-        case .films: return .blue   // Planet theme
-        case .spaceships: return .white  // Spaceship theme
-        case .characters: return .red    // Sith theme
+        case .films: return .blue
+        case .spaceships: return .white
+        case .characters: return .red
         default: return .gray
         }
     }

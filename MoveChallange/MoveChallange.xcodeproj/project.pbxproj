@@ -184,6 +184,7 @@
 					};
 					ABB1887C2D67895E00945C54 = {
 						CreatedOnToolsVersion = 16.2;
+						LastSwiftMigration = 1620;
 						TestTargetID = ABB1886C2D67895A00945C54;
 					};
 					ABB188862D67895E00945C54 = {
@@ -459,6 +460,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 3NASZH28DK;
@@ -468,6 +470,8 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.clint.MoveChallangeTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_OBJC_BRIDGING_HEADER = "MoveChallangeTests/MockDI/MoveChallangeTests-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/MoveChallange.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/MoveChallange";
@@ -478,6 +482,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 3NASZH28DK;
@@ -487,6 +492,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.clint.MoveChallangeTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_OBJC_BRIDGING_HEADER = "MoveChallangeTests/MockDI/MoveChallangeTests-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/MoveChallange.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/MoveChallange";

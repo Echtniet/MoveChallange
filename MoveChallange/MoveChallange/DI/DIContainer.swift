@@ -130,15 +130,19 @@ class DIContainer {
         container.register(CharacterCoordinator.self) { resolver in
             CharacterCoordinator(fetchCharacterPageUseCase: resolver.resolve(FetchCharacterPageUseCaseProtocol.self)!)
         }
+        .inObjectScope(.container)
         container.register(FilmCoordinator.self) { resolver in
             FilmCoordinator(fetchFilmPageUseCase: resolver.resolve(FetchFilmPageUseCaseProtocol.self)!)
         }
+        .inObjectScope(.container)
         container.register(SpaceshipCoordinator.self) { resolver in
             SpaceshipCoordinator(fetchSpaceshipPageUseCase: resolver.resolve(FetchSpaceshipPageUseCaseProtocol.self)!)
         }
+        .inObjectScope(.container)
         container.register(FavoriteCoordinator.self) { resolver in
             FavoriteCoordinator()
         }
+        .inObjectScope(.container)
         container.register(AppCoordinator.self) { resolver in
             AppCoordinator(
                 characterCoordinator: resolver.resolve(CharacterCoordinator.self)!,
@@ -147,6 +151,7 @@ class DIContainer {
                 favoriteCoordinator: resolver.resolve(FavoriteCoordinator.self)!
             )
         }
+        .inObjectScope(.container)
     }
 
     func resolve<T>(_ type: T.Type) -> T {

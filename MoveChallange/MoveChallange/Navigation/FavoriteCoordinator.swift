@@ -11,4 +11,8 @@ import SwiftUI
 @Observable
 class FavoriteCoordinator {
     var path: NavigationPath = .init()
+
+    func back() {
+//        path.removeLast()
+    }
 }

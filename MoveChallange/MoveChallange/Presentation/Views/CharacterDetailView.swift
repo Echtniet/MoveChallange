@@ -10,12 +10,13 @@ import SwiftUI
 struct CharacterDetailView: View {
     var namespace: Namespace.ID
 
-    @Environment(AppCoordinator.self) var coordinator
     @State private var viewModel: CharacterDetailViewModel
+    @State private var coordinator: AppCoordinator
 
-    init(_ namespace: Namespace.ID, character: StarCharacter, viewModel: CharacterDetailViewModel) {
+    init(_ namespace: Namespace.ID, character: StarCharacter, viewModel: CharacterDetailViewModel, coordinator: AppCoordinator) {
         self.namespace = namespace
-       _viewModel = State(wrappedValue: viewModel)
+        _viewModel = State(wrappedValue: viewModel)
+        _coordinator = State(wrappedValue: coordinator)
         viewModel.character = character
     }
 

@@ -50,10 +50,10 @@ struct StarCharacter: Hashable {
         self.height = model.height
         self.homeworld = model.homeworld
         self.name = model.name
-        self.species = []//model.species
-        self.starships = []//model.starships
+        self.species = model.species
+        self.starships = model.starships
         self.url = model.url
-        self.vehicles = []//model.vehicles
+        self.vehicles = model.vehicles
     }
 
     enum Gender: String, Codable {

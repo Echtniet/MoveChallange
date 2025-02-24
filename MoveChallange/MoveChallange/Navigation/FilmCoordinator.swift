@@ -18,9 +18,13 @@ class FilmCoordinator {
         self.fetchFilmPageUseCase = fetchFilmPageUseCase
     }
 
+    func back() {
+        path.removeLast()
+    }
+
     func navigateToDetail(film: Film, shouldClearPath: Bool = false) {
         if shouldClearPath {
-            path.removeAll()
+//            path.removeAll()
         }
         path.append(AppRoute.filmDetail(film))
     }

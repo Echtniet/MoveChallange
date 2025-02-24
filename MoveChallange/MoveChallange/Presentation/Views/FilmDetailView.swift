@@ -10,12 +10,13 @@ import SwiftUI
 struct FilmDetailView: View {
     var namespace: Namespace.ID
 
-    @Environment(AppCoordinator.self) var coordinator
     @State private var viewModel: FilmDetailViewModel
+    @State private var coordinator: AppCoordinator
 
-    init(_ namespace: Namespace.ID, film: Film, viewModel: FilmDetailViewModel) {
+    init(_ namespace: Namespace.ID, film: Film, viewModel: FilmDetailViewModel, coordinator: AppCoordinator) {
         self.namespace = namespace
-       _viewModel = State(wrappedValue: viewModel)
+        _viewModel = State(wrappedValue: viewModel)
+        _coordinator = State(wrappedValue: coordinator)
         viewModel.film = film
     }
 

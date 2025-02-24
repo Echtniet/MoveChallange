@@ -11,12 +11,13 @@ struct FavoritesPageView: View {
 
     var namespace: Namespace.ID
 
-    @Environment(AppCoordinator.self) var coordinator
     @State private var viewModel: FavoritesPageViewModel
+    @State private var coordinator: AppCoordinator
 
-    init(_ namespace: Namespace.ID, viewModel: FavoritesPageViewModel) {
+    init(_ namespace: Namespace.ID, viewModel: FavoritesPageViewModel, coordinator: AppCoordinator) {
         self.namespace = namespace
         _viewModel = State(wrappedValue: viewModel)
+        _coordinator = State(wrappedValue: coordinator)
     }
 
     var body: some View {
