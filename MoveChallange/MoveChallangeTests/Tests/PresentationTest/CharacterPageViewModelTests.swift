@@ -13,6 +13,7 @@ struct CharacterPageViewModelTests {
 
     @Test func testFetchCharacterPageSuccess() async throws {
         let mockUseCase = MockFetchCharacterPageUseCase()
+        mockUseCase.mockCharacterPage = CharacterPage(dto: CharacterPageDTO(count: 10, next: "link", previous: nil, results: []))
         let viewModel = CharacterPageViewModel(
             fetchCharacterPageUseCase: mockUseCase,
             filterCharacterGenderUseCase: FilterCharacterGenderUseCase()

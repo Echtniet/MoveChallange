@@ -21,7 +21,6 @@ enum AppRoute: Hashable {
 @Observable
 final class AppCoordinator {
     var selectedTab: Tab = .characters
-//    var currentRoute: AppRoute = .characterPage
     var navigationPath: [Tab] = []
     var characterCoordinator: CharacterCoordinator
     var filmCoordinator: FilmCoordinator

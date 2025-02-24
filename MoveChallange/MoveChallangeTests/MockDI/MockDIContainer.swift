@@ -20,7 +20,6 @@ class MockAPIService: APIServiceProtocol {
         if shouldThrowError {
             throw NSError(domain: "FetchPageError", code: 1)
         }
-        mockCharacterPageDTO = CharacterPageDTO(count: 10, next: "link", previous: nil, results: [])
         return mockCharacterPageDTO
     }
 
@@ -110,21 +109,20 @@ class MockAPIService: APIServiceProtocol {
 
 class MockCharacterPageRepository: CharacterPageRepositoryProtocol {
 
-    var mockCharacterPageDTO: CharacterPage!
+    var mockCharacterPageDTO: CharacterPageDTO!
     var shouldThrowError: Bool = false
 
     func fetchCharactersPage(for pageNumber: Int, search criteria: String) async throws -> MoveChallange.CharacterPage {
         if shouldThrowError {
             throw NSError(domain: "FetchPageError", code: 1)
         }
-        let characterPage = CharacterPage(dto: CharacterPageDTO(count: 10, next: "link", previous: nil, results: []))
-        return characterPage
+        return CharacterPage(dto: mockCharacterPageDTO)
     }
 }
 
 class MockFetchCharacterPageUseCase: FetchCharacterPageUseCaseProtocol {
 
-    var mockCharacterPageDTO: CharacterPageDTO!
+    var mockCharacterPage: CharacterPage!
     var shouldThrowError: Bool = false
     
 
@@ -132,7 +130,7 @@ class MockFetchCharacterPageUseCase: FetchCharacterPageUseCaseProtocol {
         if shouldThrowError {
             throw NSError(domain: "FetchPageError", code: 1)
         }
-        return CharacterPage(dto: CharacterPageDTO(count: 10, next: "link", previous: nil, results: []))
+        return mockCharacterPage
     }
 }
 

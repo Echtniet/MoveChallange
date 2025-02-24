@@ -14,6 +14,7 @@ struct FetchCharacterPageUseCaseTests {
 
     @Test func testFetchCharacterPageSuccess() async throws {
         let mockRepository = MockCharacterPageRepository()
+        mockRepository.mockCharacterPageDTO = CharacterPageDTO(count: 10, next: nil, previous: nil, results: [])
         let useCase = FetchCharacterPageUseCase(repository: mockRepository)
         let characterPage = try await useCase.execute(for: 1)
 

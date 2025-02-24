@@ -13,6 +13,7 @@ struct CharacterIntegrationTests {
 
     @Test func testCharacterFetchingFlow() async throws {
         let mockAPI = MockAPIService()
+        mockAPI.mockCharacterPageDTO = CharacterPageDTO (count: 10, next: "link", previous: nil, results: [])
         let repository = CharacterPageRepository(apiService: mockAPI)
         let useCase = FetchCharacterPageUseCase(repository: repository)
 

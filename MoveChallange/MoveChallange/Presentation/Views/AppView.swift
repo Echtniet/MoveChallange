@@ -20,9 +20,6 @@ struct AppView: View {
 
         UITabBar.appearance().standardAppearance = appearance
         UITabBar.appearance().scrollEdgeAppearance = appearance
-        UITabBar.appearance().barTintColor = UIColor.black
-        UITabBar.appearance().unselectedItemTintColor = UIColor.gray
-        UITabBar.appearance().unselectedItemTintColor = UIColor.darkGray
     }
 
     var body: some View {
@@ -57,7 +54,6 @@ struct AppView: View {
                     }
                 }
             }
-
             .tabItem {
                 Image(systemName: "person")
                 Text("Characters")
