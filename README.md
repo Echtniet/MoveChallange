@@ -38,3 +38,5 @@ Contributions are welcome! Feel free to fork the repository and submit pull requ
 - Fixing the SwiftData issue related to the `Array<String>` type.
 - Adding the option to delete saved favorites.
 - Implementing a filled heart icon when an item is liked.
+
+#### Did not focus on git commits due to time crunch.
